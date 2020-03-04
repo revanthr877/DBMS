@@ -1,0 +1,68 @@
+create table person(
+driver_id varchar2(10),
+name varchar2(10),
+address varchar2(10),
+primary key(driver_id));
+create table car(
+regno varchar2(10),
+model varchar2(10),
+year number(4),
+primary key(regno));
+create table accident(
+report_no number(5),
+adate date,
+location varchar2(15),
+primary key(report_no));
+create table owns(
+driver_id varchar2(10),
+regno varchar2(10),
+primary key(driver_id,regno),
+foreign key(driver_id)references person(driver_id),
+foreign key(regno)references car(regno));
+create table paerticipated(
+driver_id varchar(10),
+regno varchar2(10),
+report_no number(5),
+damage_amt number(7,2),
+primary key(driver_id,regno,report_no),
+foreign key(driver_id,regno)references owns(driver_id,regno)on delete cascade,
+foreign key(report_no)references accident(report_no)on delete cascade);
+ ALTER TABLE paerticipated RENAME TO participated;
+
+insert into person values('&driver_id','&name','&address');
+select * from person;
+insert into car values('&regno','&model',&year);
+select * from car;
+insert into accident values(&report_no,'&adate','&location');
+select * from accident;
+insert into owns values(&driver_id,'&regno');
+select * from owns;
+insert into participated values(&driver_id,'&regno','&report_no',&damage_amt);
+select * from participated;
+UPDATE PARTICIPATED
+
+SET DAMAGE_AMT=25000
+
+WHERE REPORT_NO =12 AND REGNO='KA04Q2301';
+
+
+
+SELECT COUNT(*) FROM ACCIDENT
+
+WHERE ADATE LIKE '__-___-02';
+
+
+
+SELECT COUNT(A.REPORT_NO)
+
+FROM ACCIDENT A, PARTICIPATED P, CAR C
+
+WHERE A.REPORT_NO=P.REPORT_NO
+
+AND
+
+P.REGNO=C.REGNO
+
+AND
+
+C.MODEL='MARUTHI-DX';
